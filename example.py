@@ -1,13 +1,17 @@
-#!/usr/bin/python
+from pynt.pynt import Settings, Beer
 
-from pynt import Pynt
+# Setting options
+Settings.host = 'http://api.localhost:3000/v1/'
+Settings.public_token = 'YOUR_PUBLIC_TOKEN'
+Settings.private_token = 'YOUR_PRIVATE_TOKEN'
 
-# Instantiate Pynt object
-p = Pynt()
+
+# Get all beers
+print Beer.all()
 
 '''
-# Get the beer with id = 2
-print p.get_beer(4)
+# Get the beer with id 2
+print Beer.get(2)
 '''
 
 '''
@@ -16,19 +20,11 @@ beer_data = {
     "name"        : "Strawberry Harvest",
     "description" : "Strawberry Harvest Lager is a wheat beer ...",
     "abv"         : 4.2
-  }
-print p.create_beer(brewery_id=1, beer=beer_data)
+}
+print Beer.create(brewery_id = 1, beer = beer_data)
 '''
 
 '''
-# Delete a beer
-print p.delete_beer(5)
-'''
-
-# Get all beers
-print p.get_beers()
-
-'''
-# Get second page of beers, five at a time
-print p.get_beers(page=2, per_page=5)
+# Delete beer with id 5
+print Beer.delete(5)
 '''

@@ -1,76 +1,59 @@
-#!/usr/bin/python
-
 from httplib2 import Http
-from urllib import quote, urlencode
-from urllib2 import HTTPError
-from settings import API_URL, PUBLIC_TOKEN, PRIVATE_TOKEN
-
-# Attempt to import simplejson (not so simple, huh?)
-try:
-	# Python 2.6 and up
-	import json as simplejson
-except ImportError:
-	try:
-		# Python 2.6 and lower
-		import simplejson
-	except:
-		# Rut roh.
-		raise Exception("simplejson (or Python 2.6 and higher) is required")
-
+from urllib import quote
+from simplejson import dumps, loads
+from settings import Settings
 
 class Request(object):
 
-	def __init__(self):
-		"""
-			Instantiates an instance of Request
-		"""
-		# Get a client for making requests
-		self.client = Http()
-
 	# Handle GET requests
-	def get(self, url, params={}):
-		# Add the public token to the parameters
-		params['token'] = PUBLIC_TOKEN
+	@classmethod
+	def get(self, path, parameters = {}):
+		parameters['token'] = Settings.public_token
 
 		# dict to query string from: http://bit.ly/k1fAsx
-		query_string = '&'.join([k+'='+quote(str(v)) for (k,v) in params.items()])
-	
-		# Mash it all together and send it off!
-		url = "%s%s?%s" % (API_URL, url, query_string,)
-		resp, content = self.client.request(url, 'GET')
-	
-		# TODO: If resp != 200, what do we do?
-		return simplejson.loads(content)
+		query_string = '&'.join([k+'='+quote(str(v)) for (k,v) in parameters.items()])
+		path = "%s%s?%s" % (Settings.host, path, query_string,)
+		
+		return self.request(path)
 
 	# Handle POST requests	
-	def post(self, url, params={}):
-		# Add the private token to the parameters
-		params['token'] = PRIVATE_TOKEN
+	@classmethod
+	def post(self, path, parameters={}):
+		parameters['token'] = Settings.private_token
 
-		url = "%s%s" % (API_URL, url,)
-		body = simplejson.dumps(params)
-		headers = {'Content-Type': 'application/json'}
-	
-		resp, content = self.client.request(url, 'POST', body=body, headers=headers)
-	
-		if resp['status'] == 201:
-			return resp['location']
-		else:
-			return "Http Error Code: %s\nResponse: %s" % (resp['status'], content,)
+		path = "%s%s" % (Settings.host, path,)
+		options = {
+			'request_type' : 'POST',
+			'body' : dumps(parameters),
+			'headers' : {'Content-Type': 'application/json'}
+		}
 		
-	# Handle DELETE requests	
-	def delete(self, url):
-		# Add the private token to the parameters
-		params = {'token': PRIVATE_TOKEN}
-
-		url = "%s%s" % (API_URL, url,)
-		body = simplejson.dumps(params)
-		headers = {'Content-Type': 'application/json'}
-	
-		resp, content = self.client.request(url, 'DELETE', body=body, headers=headers)
-	
-		if resp['status'] == '200':
-			return 1
-		else:
-			return "Http Error Code: %s\nResponse: %s" % (resp['status'], content,)
+		return self.request(path, options)
 		
+	# Handle DELETE requests
+	@classmethod	
+	def delete(self, path):
+		path = "%s%s" % (Settings.host, path,)
+		options = {
+			'request_type' : 'DELETE',
+			'body' : dumps({'token': Settings.private_token}),
+			'headers' : {'Content-Type': 'application/json'}
+		}
+		
+		return self.request(path, options)
+		
+	@classmethod
+	def request(self, path, options = {}):
+		client = Http()
+		
+		if len(options) == 0:
+			resp, content = client.request(path)
+		else:
+			resp, content = client.request(
+				path, 
+				options['request_type'], 
+				body = options['body'], 
+				headers = options['headers']
+			)
+		
+		return loads(content)

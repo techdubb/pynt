@@ -1,1 +1,1 @@
-from pynt import Pynt
+import pynt
