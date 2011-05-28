@@ -1,9 +1,9 @@
 from pynt.pynt import Settings, Beer
 
 # Setting options
-Settings.host 			= 'http://api.localhost:3000/v1/'
-Settings.public_token 	= 'YOUR_PUBLIC_TOKEN'
-Settings.private_token 	= 'YOUR_PRIVATE_TOKEN'
+Settings.host           = 'http://api.localhost:3000/v1/'
+Settings.public_token   = 'YOUR_PUBLIC_TOKEN'
+Settings.private_token  = 'YOUR_PRIVATE_TOKEN'
 
 
 # Get all beers
