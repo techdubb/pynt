@@ -1,16 +1,26 @@
-# README
+# Pynt
 
-## Pynt
+A Python client for [Open Beer Database](https://github.com/tristandunn/openbeerdatabase).
 
-Pynt is a library for Python that wraps the [Open Beer Database](https://github.com/tristandunn/openbeerdatabase) API. 
+## Requirements
 
-## Settings
-
-Add your tokens to the settings file and:
-
-    mv example-settings.py settings.py
+* Python 2.6+
+* simplejson
+* httplib2
+* urllib
 
 ## Example
 
-Checkout 'example.py'.
+~~~ python
+from pynt.pynt import Beer
+
+# Get a beer by ID.
+print Beer.get(1)
+~~~
+
+Checkout `example.py` for more.
+
+## License
+
+Pynt uses the MIT license. See LICENSE for more details.
 
