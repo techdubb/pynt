@@ -1,7 +1,7 @@
 """
-	Pynt is a Python client that wraps the Open Beer Database API.
+    Pynt is a Python client that wraps the Open Beer Database API.
 
-	Questions, comments? m@h0ke.com
+    Questions, comments? m@h0ke.com
 """
 
 __author__ = "Matthew Hokanson <m@h0ke.com>"
