@@ -1,6 +1,6 @@
 # Pynt
 
-A Python client for [Open Beer Database](https://github.com/tristandunn/openbeerdatabase).
+A Python client for [Open Beer Database](https://github.com/openbeerdatabase/openbeerdatabase).
 
 ## Requirements
 
